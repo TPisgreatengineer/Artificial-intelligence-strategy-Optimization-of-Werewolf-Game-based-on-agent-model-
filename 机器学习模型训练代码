@@ -1,0 +1,94 @@
+import numpy as np
+
+import collectdata
+x_old = np.array(collectdata.x)
+y_0ld = collectdata.y
+x= np.array(collectdata.x1)
+y=collectdata.y1
+
+from sklearn import preprocessing
+x = preprocessing.scale(x)
+
+# print(x.std(axis=0))
+
+from sklearn.model_selection import train_test_split
+x_train,x_test,y_train,y_test = train_test_split(x,y)
+
+####3.1决策树回归####
+from sklearn import tree
+model_DecisionTreeRegressor = tree.DecisionTreeRegressor()
+model_DecisionTreeRegressor.fit(x_train,y_train)
+####3.2线性回归####
+from sklearn import linear_model
+model_LinearRegression = linear_model.LinearRegression()
+model_LinearRegression.fit(x_train,y_train)
+####3.3SVM回归####
+from sklearn import svm
+model_SVR = svm.SVR()
+model_SVR.fit(x_train,y_train)
+####3.4KNN回归####
+from sklearn import neighbors
+model_KNeighborsRegressor = neighbors.KNeighborsRegressor()
+model_KNeighborsRegressor.fit(x_train,y_train)
+####3.5随机森林回归####
+from sklearn import ensemble
+model_RandomForestRegressor = ensemble.RandomForestRegressor(n_estimators=20)#这里使用20个决策树
+model_RandomForestRegressor.fit(x_train,y_train)
+####3.6Adaboost回归####
+from sklearn import ensemble
+model_AdaBoostRegressor = ensemble.AdaBoostRegressor(n_estimators=50)#这里使用50个决策树
+model_AdaBoostRegressor.fit(x_train,y_train)
+
+####3.7GBRT回归####
+from sklearn import ensemble
+model_GradientBoostingRegressor = ensemble.GradientBoostingRegressor(n_estimators=1000)#这里使用100个决策树
+model_GradientBoostingRegressor.fit(x_train,y_train)
+
+####3.8Bagging回归####
+from sklearn.ensemble import BaggingRegressor
+model_BaggingRegressor = BaggingRegressor()
+model_BaggingRegressor.fit(x_train,y_train)
+####3.9ExtraTree极端随机树回归####
+from sklearn.tree import ExtraTreeRegressor
+model_ExtraTreeRegressor = ExtraTreeRegressor()
+model_ExtraTreeRegressor.fit(x_train,y_train)
+
+from sklearn.model_selection import cross_val_score
+scores = cross_val_score(model_LinearRegression,x,y,cv=5)
+print("得分：",scores.mean())
+
+print("KNN回归")
+scores = cross_val_score(model_KNeighborsRegressor,x,y,cv=5)
+print("得分：",scores.mean())
+
+print("决策树回归")
+scores = cross_val_score(model_DecisionTreeRegressor,x,y,cv=5)
+print("得分：",scores.mean())
+
+print("SVM回归")
+# print("采样值",y_test[:5])
+# print("预测值",model_SVR.predict(x_test[:5]))
+scores = cross_val_score(model_SVR,x,y,cv=5)
+print("得分：",scores.mean())
+
+print("随机森林回归")
+scores = cross_val_score(model_RandomForestRegressor,x,y,cv=5)
+print("得分：",scores.mean())
+
+print("Adaboost回归")
+scores = cross_val_score(model_AdaBoostRegressor,x,y,cv=5)
+print("得分：",scores.mean())
+
+print("GBRT回归")
+# print("采样值",y_test[:5])
+# print("预测值",model_GradientBoostingRegressor.predict(x_test[:5]))
+scores = cross_val_score(model_GradientBoostingRegressor,x,y,cv=5)
+print("得分：",scores.mean())
+
+print("Bagging回归")
+scores = cross_val_score(model_BaggingRegressor,x,y,cv=5)
+print("得分：",scores.mean())
+
+print("ExtraTree极端随机树回归")
+print("得分：",scores.mean())
+
